@@ -3,7 +3,6 @@ package com.ivanchou;
 
 import com.ivanchou.server.SmallFileOperateInterface;
 import com.ivanchou.server.SmallFileOperateInterface.FileStatus;
-import org.apache.avro.file.SeekableByteArrayInput;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
