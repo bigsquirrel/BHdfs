@@ -13,6 +13,7 @@ public class ServerConstant {
     public static final String INDEX_CK_EXIST = "exist";
     public static final String INDEX_CK_FILEPATH = "filepath";
     public static final String INDEX_CK_OFFSET = "offset";
+    public static final String INDEX_CK_LENGTH = "length";
     public static final String ADDRESS = "127.0.0.1";
     public static final int PORT = 9001;
 }

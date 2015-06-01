@@ -60,22 +60,29 @@ public class SmallFileOperate implements SmallFileOperateInterface {
     public String getHDFSFilePath(String path) {
         Result result;
         String filePath = "";
-        long offSet = 0;
+        String offSet = "";
+        String length = "";
         try {
             result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
                     ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_FILEPATH);
             if (!result.isEmpty()) {
-                filePath = Bytes.toString(result.raw()[0].getValue());
+                filePath = new String(result.raw()[0].getValue());
             }
 
             result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
                     ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_OFFSET);
 
             if (!result.isEmpty()) {
-                offSet = Bytes.toLong(result.raw()[0].getValue());
+                offSet = new String(result.raw()[0].getValue());
             }
 
-            return filePath + "#" + offSet;
+            result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
+                    ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_LENGTH);
+            if (!result.isEmpty()) {
+                length = new String(result.raw()[0].getValue());
+            }
+
+            return filePath + "#" + offSet + "#" + length;
         } catch (IOException e) {
             e.printStackTrace();
         }

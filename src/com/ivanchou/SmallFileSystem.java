@@ -56,9 +56,18 @@ public class SmallFileSystem extends DistributedFileSystem {
             if (!str.equals("")) {
                 String strs[] = str.split("#");
                 String fp = strs[0];   // the path of the big file
-                String offset = strs[1];  // the offset in the big file
-            }
+                long offset = Long.valueOf(strs[1]);  // the offset in the big file
+                int length = Integer.valueOf(strs[2]);
 
+                FSDataInputStream in = super.open(new Path(fp), bufferSize);
+                in.seek(offset);
+
+                byte[] buffer = new byte[length];
+                if (in.read(offset, buffer, 0, length) != length) {
+                    System.out.println("-------read wrong-------");
+                }
+                return new FSDataInputStream(new SFDataInputStream(buffer));
+            }
             return null;
         } else {
             // status == FileStatus.NOT_EXIST

@@ -25,8 +25,8 @@ public class BHdfs {
     public void read() throws IOException {
         Configuration conf = new Configuration();
         conf.set("fs.sdfs.impl", com.ivanchou.SmallFileSystem.class.getName());
-        FileSystem fileSystem = FileSystem.get(URI.create("sdfs://localhost:9000/usr/hw1/file1"), conf);
-        Path path = new Path("sdfs://localhost:9000/usr/hw1/file1");
+        FileSystem fileSystem = FileSystem.get(URI.create("sdfs://localhost:9000/user/zxl/test"), conf);
+        Path path = new Path("sdfs://localhost:9000/user/zxl/test");
         FSDataInputStream is = fileSystem.open(path);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
