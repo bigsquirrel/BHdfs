@@ -3,13 +3,13 @@ package com.ivanchou;
 
 import com.ivanchou.server.SmallFileOperateInterface;
 import com.ivanchou.server.SmallFileOperateInterface.FileStatus;
+import org.apache.avro.file.SeekableByteArrayInput;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.hadoop.ipc.RPC;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -48,11 +48,18 @@ public class SmallFileSystem extends DistributedFileSystem {
 
         if (status == FileStatus.EXIST) {
             // if small file is still on hbase, then return.
+            InputStream is = new SFDataInputStream(smallFileServer.read(filePath));
 
-            return null;
+            return new FSDataInputStream(is);
         } else if (status == FileStatus.REMOVE) {
             // if small file is merged and store to hdfs, then use Seekable interface.
-            smallFileServer.getTableName(filePath);
+            String str = smallFileServer.getHDFSFilePath(filePath);
+            if (!str.equals("")) {
+                String strs[] = str.split("#");
+                String fp = strs[0];   // the path of the big file
+                String offset = strs[1];  // the offset in the big file
+            }
+
             return null;
         } else {
             // status == FileStatus.NOT_EXIST

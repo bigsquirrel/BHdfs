@@ -1,5 +1,8 @@
 package com.ivanchou.server;
 
+import org.apache.avro.file.SeekableByteArrayInput;
+
+
 /**
  * Created by ivanchou on 6/1/15.
  */
@@ -7,7 +10,7 @@ public interface SmallFileOperateInterface {
     static final long versionID = 1L;
     enum FileStatus {NOT_EXIST, REMOVE, EXIST}
 
-    String read();
+    byte[] read(String path);
 
     void write();
 
@@ -17,5 +20,5 @@ public interface SmallFileOperateInterface {
 
     FileStatus exist(String path);
 
-    String getTableName(String path);
+    String getHDFSFilePath(String path);
 }

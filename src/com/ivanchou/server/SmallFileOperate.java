@@ -1,18 +1,27 @@
 package com.ivanchou.server;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
+
+import java.io.*;
+
 /**
  * Created by ivanchou on 6/1/15.
  */
 public class SmallFileOperate implements SmallFileOperateInterface {
 
     @Override
-    public String read() {
+    public byte[] read(String path) {
+        try {
+            return HBaseOperate.getRow(ServerConstant.DATA_TABLE_NAME, path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public void write() {
-
 
     }
 
@@ -28,11 +37,49 @@ public class SmallFileOperate implements SmallFileOperateInterface {
 
     @Override
     public FileStatus exist(String path) {
-        return FileStatus.EXIST;
+        try {
+            Result result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
+                    ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_EXIST);
+            if (!result.isEmpty()) {
+                if (Integer.valueOf(new String(result.raw()[0].getValue())) == 0) {
+                    return FileStatus.REMOVE;
+                } else {
+                    return FileStatus.EXIST;
+                }
+            } else {
+                return FileStatus.NOT_EXIST;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return FileStatus.NOT_EXIST;
     }
 
     @Override
-    public String getTableName(String path) {
-        return "Merge_One";
+    public String getHDFSFilePath(String path) {
+        Result result;
+        String filePath = "";
+        long offSet = 0;
+        try {
+            result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
+                    ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_FILEPATH);
+            if (!result.isEmpty()) {
+                filePath = Bytes.toString(result.raw()[0].getValue());
+            }
+
+            result = HBaseOperate.getResultByColumn(ServerConstant.INDEX_TABLE_NAME, path,
+                    ServerConstant.INDEX_CF_STATE, ServerConstant.INDEX_CK_OFFSET);
+
+            if (!result.isEmpty()) {
+                offSet = Bytes.toLong(result.raw()[0].getValue());
+            }
+
+            return filePath + "#" + offSet;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }

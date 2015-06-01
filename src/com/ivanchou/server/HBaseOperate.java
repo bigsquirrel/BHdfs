@@ -77,18 +77,26 @@ public class HBaseOperate {
         table.delete(list);
     }
 
-    public static void getRow(String tableName, String row) throws IOException {
+    public static byte[] getRow(String tableName, String rowKey) throws IOException {
         HTable table = new HTable(conf, tableName);
-        Get get = new Get(Bytes.toBytes(row));
+        Get get = new Get(Bytes.toBytes(rowKey));
         Result result = table.get(get);
 
-        for (KeyValue rowKV : result.raw()) {
-            System.out.print("Row Name: " + new String(rowKV.getRow()) + " ");
-            System.out.print("Timestamp: " + rowKV.getTimestamp() + " ");
-            System.out.print("column Family: " + new String(rowKV.getFamily()) + " ");
-            System.out.print("Row Name:  " + new String(rowKV.getQualifier()) + " ");
-            System.out.println("Value: " + new String(rowKV.getValue()) + " ");
+        for (KeyValue kv : result.raw()) {
+            System.out.print("Row Name: " + new String(kv.getRow()) + " ");
+            System.out.print("Timestamp: " + kv.getTimestamp() + " ");
+            System.out.print("column Family: " + new String(kv.getFamily()) + " ");
+            System.out.print("Row Name:  " + new String(kv.getQualifier()) + " ");
+            System.out.println("Value: " + new String(kv.getValue()) + " ");
         }
+        return result.raw()[0].getValue();
+    }
+
+    public static Result getResultByColumn(String tableName, String rowKey, String familyName, String columnName) throws IOException {
+        HTable table = new HTable(conf, tableName);
+        Get get = new Get(Bytes.toBytes(rowKey));
+        get.addColumn(Bytes.toBytes(familyName), Bytes.toBytes(columnName));
+        return table.get(get);
     }
 
     public static void getAllRows(String tableName) throws IOException {
