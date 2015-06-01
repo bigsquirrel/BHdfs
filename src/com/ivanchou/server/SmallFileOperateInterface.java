@@ -5,6 +5,7 @@ package com.ivanchou.server;
  */
 public interface SmallFileOperateInterface {
     static final long versionID = 1L;
+    enum FileStatus {NOT_EXIST, REMOVE, EXIST}
 
     String read();
 
@@ -14,5 +15,7 @@ public interface SmallFileOperateInterface {
 
     void merge();
 
-    boolean exist(String path);
+    FileStatus exist(String path);
+
+    String getTableName(String path);
 }

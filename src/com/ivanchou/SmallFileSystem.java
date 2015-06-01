@@ -2,6 +2,7 @@ package com.ivanchou;
 
 
 import com.ivanchou.server.SmallFileOperateInterface;
+import com.ivanchou.server.SmallFileOperateInterface.FileStatus;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
@@ -43,14 +44,18 @@ public class SmallFileSystem extends DistributedFileSystem {
             sb.setCharAt(0, 'h');
             f = new Path(sb.toString());
         }
+        FileStatus status = smallFileServer.exist(filePath);
 
-        if (smallFileServer.exist(filePath)) {
+        if (status == FileStatus.EXIST) {
             // if small file is still on hbase, then return.
 
+            return null;
+        } else if (status == FileStatus.REMOVE) {
             // if small file is merged and store to hdfs, then use Seekable interface.
-
+            smallFileServer.getTableName(filePath);
             return null;
         } else {
+            // status == FileStatus.NOT_EXIST
             // never store to hbase, handle to hdfs.
             return super.open(f, bufferSize);
         }

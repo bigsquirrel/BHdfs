@@ -27,7 +27,12 @@ public class SmallFileOperate implements SmallFileOperateInterface {
     }
 
     @Override
-    public boolean exist(String path) {
-        return true;
+    public FileStatus exist(String path) {
+        return FileStatus.EXIST;
+    }
+
+    @Override
+    public String getTableName(String path) {
+        return "Merge_One";
     }
 }
