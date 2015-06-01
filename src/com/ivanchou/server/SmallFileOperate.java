@@ -13,6 +13,7 @@ public class SmallFileOperate implements SmallFileOperateInterface {
     @Override
     public void write() {
 
+
     }
 
     @Override
@@ -23,5 +24,10 @@ public class SmallFileOperate implements SmallFileOperateInterface {
     @Override
     public void merge() {
 
+    }
+
+    @Override
+    public boolean exist(String path) {
+        return true;
     }
 }
