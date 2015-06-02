@@ -3,6 +3,7 @@ package com.ivanchou;
 
 import com.ivanchou.server.SmallFileOperateInterface;
 import com.ivanchou.server.SmallFileOperateInterface.FileStatus;
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
@@ -76,15 +77,18 @@ public class SmallFileSystem extends DistributedFileSystem {
         }
     }
 
-    public void create(String local, Path dst) throws IOException {
+    public FSDataOutputStream create(String local, Path dst) throws IOException {
         File file = new File(local);
         if (file.exists() && file.length() < SMALL_FILE_BYTES) {
             // is a small file, store to hbase.
             // key:dst | value:content
-
+            InputStream is = new FileInputStream(file);
+            byte[] data = IOUtils.toByteArray(is);
+            smallFileServer.write(data);
+            return null;
         } else {
             // not a small file, handle to hdfs.
-            this.create(dst);
+            return this.create(dst);
         }
     }
 }

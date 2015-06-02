@@ -1,5 +1,7 @@
 package com.ivanchou.server;
 
+import java.io.IOException;
+
 /**
  * Created by ivanchou on 6/1/15.
  */
@@ -9,7 +11,7 @@ public interface SmallFileOperateInterface {
 
     byte[] read(String path);
 
-    void write();
+    void write(byte[] data);
 
     void delete();
 

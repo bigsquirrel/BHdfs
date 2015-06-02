@@ -1,7 +1,6 @@
 package com.ivanchou.server;
 
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.*;
 
@@ -21,8 +20,12 @@ public class SmallFileOperate implements SmallFileOperateInterface {
     }
 
     @Override
-    public void write() {
-
+    public void write(byte[] data){
+        try {
+            System.out.println("-------->" + new String(data, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
