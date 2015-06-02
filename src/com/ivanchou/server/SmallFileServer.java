@@ -15,7 +15,7 @@ public class SmallFileServer {
         SmallFileServer fileServer = new SmallFileServer();
         try {
             fileServer.startServer();
-//            fileServer.createTables();
+            fileServer.createTables();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,5 +49,8 @@ public class SmallFileServer {
          *             state:offset  value: <no>
          */
         HBaseOperate.createTable(ServerConstant.INDEX_TABLE_NAME, new String[]{ServerConstant.INDEX_CF_STATE});
+
+        HBaseOperate.addRow(ServerConstant.DATA_TABLE_NAME, ServerConstant.DATA_RK_LENGTH,
+                ServerConstant.DATA_CF_CONTENT, ServerConstant.DATA_CK_LENGTH, "0");
     }
 }

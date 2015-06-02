@@ -18,8 +18,8 @@ import java.net.URI;
  * Created by ivanchou on 6/1/15.
  */
 public class SmallFileSystem extends DistributedFileSystem {
-    private static final long SMALL_FILE_BYTES = 125000; // 1MB
-    private static final long MERGE_FILE_BYTES = 1250000; // 10MB
+    private static final long SMALL_FILE_BYTES = 200; // 1MB -> 125000
+    private static final long MERGE_FILE_BYTES = 300; // 10MB -> 1250000
 
     private SmallFileOperateInterface smallFileServer;
 

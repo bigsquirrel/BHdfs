@@ -4,8 +4,8 @@ package com.ivanchou.server;
  * Created by ivanchou on 6/1/15.
  */
 public class ServerConstant {
-    public static final String DATA_TABLE_NAME = "DataTable";
-    public static final String INDEX_TABLE_NAME = "IndexTable";
+    public static final String DATA_TABLE_NAME = "DataTableTest";
+    public static final String INDEX_TABLE_NAME = "IndexTableTest";
     public static final String DATA_CF_CONTENT = "content";
     public static final String DATA_CF_STATE = "state";
     public static final String DATA_CK_LENGTH = "length";

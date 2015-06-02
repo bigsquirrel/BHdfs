@@ -109,16 +109,16 @@ public class HBaseOperate {
         Scan scan = new Scan();
         ResultScanner results = table.getScanner(scan);
 
-        for (Result result : results) {
-            for (KeyValue rowKV : result.raw()) {
-                System.out.print("Row Name: " + new String(rowKV.getRow()) + " ");
-                System.out.print("Timestamp: " + rowKV.getTimestamp() + " ");
-                System.out.print("column Family: " + new String(rowKV.getFamily()) + " ");
-                System.out
-                        .print("Row Name:  " + new String(rowKV.getQualifier()) + " ");
-                System.out.println("Value: " + new String(rowKV.getValue()) + " ");
-            }
-        }
+//        for (Result result : results) {
+//            for (KeyValue rowKV : result.raw()) {
+//                System.out.print("Row Name: " + new String(rowKV.getRow()) + " ");
+//                System.out.print("Timestamp: " + rowKV.getTimestamp() + " ");
+//                System.out.print("column Family: " + new String(rowKV.getFamily()) + " ");
+//                System.out
+//                        .print("Row Name:  " + new String(rowKV.getQualifier()) + " ");
+//                System.out.println("Value: " + new String(rowKV.getValue()) + " ");
+//            }
+//        }
         return results;
     }
 }

@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.URI;
 
 public class BHdfs {
-    public static final String LOCAL = "/Users/ivanchou/Downloads/testwrite";
+    public static final String LOCAL = "/Users/ivanchou/Downloads/testwrite1";
     public static final String DST = "sdfs://localhost:9000/user/zxl/testwrite";
     public static final String FILEPATH = "sdfs://localhost:9000/user/zxl/test";
 
@@ -23,6 +23,10 @@ public class BHdfs {
 //        RPC.stopProxy(loginService);
     }
 
+
+    public void upload() {
+
+    }
 
     public void read(String fp) throws IOException {
         Configuration conf = new Configuration();
