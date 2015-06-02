@@ -92,6 +92,11 @@ public class HBaseOperate {
         return result.raw()[0].getValue();
     }
 
+    public static long getTotalLength() throws IOException{
+        byte[] data = getRow(ServerConstant.DATA_TABLE_NAME, ServerConstant.DATA_RK_LENGTH);
+        return Long.valueOf(new String(data));
+    }
+
     public static Result getResultByColumn(String tableName, String rowKey, String familyName, String columnName) throws IOException {
         HTable table = new HTable(conf, tableName);
         Get get = new Get(Bytes.toBytes(rowKey));
@@ -99,7 +104,7 @@ public class HBaseOperate {
         return table.get(get);
     }
 
-    public static void getAllRows(String tableName) throws IOException {
+    public static ResultScanner getAllRows(String tableName) throws IOException {
         HTable table = new HTable(conf, tableName);
         Scan scan = new Scan();
         ResultScanner results = table.getScanner(scan);
@@ -114,5 +119,6 @@ public class HBaseOperate {
                 System.out.println("Value: " + new String(rowKV.getValue()) + " ");
             }
         }
+        return results;
     }
 }

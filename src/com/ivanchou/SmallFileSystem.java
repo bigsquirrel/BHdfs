@@ -19,6 +19,7 @@ import java.net.URI;
  */
 public class SmallFileSystem extends DistributedFileSystem {
     private static final long SMALL_FILE_BYTES = 125000; // 1MB
+    private static final long MERGE_FILE_BYTES = 1250000; // 10MB
 
     private SmallFileOperateInterface smallFileServer;
 
@@ -38,7 +39,8 @@ public class SmallFileSystem extends DistributedFileSystem {
     public FSDataInputStream open(Path f, int bufferSize) throws IOException {
 
         URI uri = f.toUri();
-        String filePath = uri.getPath();
+//        String filePath = uri.getPath();
+        String filePath = f.toString();
         if (uri.getScheme() != null) {
             StringBuffer sb = new StringBuffer(f.toString());
             sb.setCharAt(0, 'h');
@@ -84,7 +86,11 @@ public class SmallFileSystem extends DistributedFileSystem {
             // key:dst | value:content
             InputStream is = new FileInputStream(file);
             byte[] data = IOUtils.toByteArray(is);
-            smallFileServer.write(data);
+            smallFileServer.write(dst.toString(), data);
+
+            if (smallFileServer.getHBaseSize() >= MERGE_FILE_BYTES) {
+                smallFileServer.merge(Util.randomFileName());
+            }
             return null;
         } else {
             // not a small file, handle to hdfs.

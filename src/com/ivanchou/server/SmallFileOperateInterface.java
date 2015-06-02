@@ -11,11 +11,13 @@ public interface SmallFileOperateInterface {
 
     byte[] read(String path);
 
-    void write(byte[] data);
+    void write(String rowKey, byte[] data) throws IOException;
 
-    void delete();
+    void delete(String rowKey, String[] states) throws IOException;
 
-    void merge();
+    void merge(String dst) throws IOException;
+
+    long getHBaseSize() throws IOException;
 
     FileStatus exist(String path);
 

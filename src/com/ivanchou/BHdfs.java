@@ -17,18 +17,18 @@ public class BHdfs {
 
     public static void main(String[] args) throws IOException {
         BHdfs bHdfs = new BHdfs();
-//        bHdfs.read();
-        bHdfs.write(LOCAL, DST);
+        bHdfs.read(DST);
+//        bHdfs.write(LOCAL, DST);
 
 //        RPC.stopProxy(loginService);
     }
 
 
-    public void read() throws IOException {
+    public void read(String fp) throws IOException {
         Configuration conf = new Configuration();
         conf.set("fs.sdfs.impl", com.ivanchou.SmallFileSystem.class.getName());
-        FileSystem fileSystem = FileSystem.get(URI.create(FILEPATH), conf);
-        Path path = new Path(FILEPATH);
+        FileSystem fileSystem = FileSystem.get(URI.create(fp), conf);
+        Path path = new Path(fp);
         FSDataInputStream is = fileSystem.open(path);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
