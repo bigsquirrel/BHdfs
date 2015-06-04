@@ -3,6 +3,7 @@ package com.ivanchou;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
@@ -17,14 +18,19 @@ public class BHdfs {
 
     public static void main(String[] args) throws IOException {
         BHdfs bHdfs = new BHdfs();
-        bHdfs.read(DST);
+        bHdfs.upload("/Users/ivanchou/Documents/Course/BigData/hw1-check/input");
+//        bHdfs.read(DST);
 //        bHdfs.write(LOCAL, DST);
 
 //        RPC.stopProxy(loginService);
     }
 
 
-    public void upload() {
+    public void upload(String path) throws IOException{
+        File file = new File(path);
+        for (File f : file.listFiles()) {
+            write(f.getPath(), "sdfs://localhost:9000/upload/" + f.getName());
+        }
 
     }
 
@@ -49,12 +55,15 @@ public class BHdfs {
         conf.set("fs.sdfs.impl", com.ivanchou.SmallFileSystem.class.getName());
         FileSystem fileSystem = FileSystem.get(URI.create(dst), conf);
         Path path = new Path(dst);
+        OutputStream out;
         if (fileSystem instanceof SmallFileSystem) {
-            ((SmallFileSystem) fileSystem).create(local, path);
+            out = ((SmallFileSystem) fileSystem).create(local, path);
+            if (out == null) {
+                return;
+            }
         } else {
-            OutputStream out = fileSystem.create(path);
-            IOUtils.copyBytes(in, out, 4096, true);
-
+            out = fileSystem.create(path);
         }
+        IOUtils.copyBytes(in, out, 4096, true);
     }
 }

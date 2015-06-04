@@ -1,5 +1,8 @@
 package com.ivanchou;
 
+import org.apache.hadoop.fs.Path;
+
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,5 +16,15 @@ public class Util {
         String schema = "hdfs";
         String authority = "localhost:9000";
         return schema + "://" + authority + "/merge_" + df.format(new Date());
+    }
+
+    public static Path toHDFS(Path p) {
+        URI uri = p.toUri();
+        if (uri.getScheme() != null) {
+            StringBuffer sb = new StringBuffer(p.toString());
+            sb.setCharAt(0, 'h');
+            p = new Path(sb.toString());
+        }
+        return p;
     }
 }

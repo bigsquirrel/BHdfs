@@ -10,6 +10,7 @@ import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.hadoop.ipc.RPC;
 
 import java.io.*;
+import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -18,8 +19,8 @@ import java.net.URI;
  * Created by ivanchou on 6/1/15.
  */
 public class SmallFileSystem extends DistributedFileSystem {
-    private static final long SMALL_FILE_BYTES = 200; // 1MB -> 125000
-    private static final long MERGE_FILE_BYTES = 300; // 10MB -> 1250000
+    private static final long SMALL_FILE_BYTES = 20000; // 1MB -> 125000
+    private static final long MERGE_FILE_BYTES = 150000; // 10MB -> 1250000
 
     private SmallFileOperateInterface smallFileServer;
 
@@ -38,14 +39,9 @@ public class SmallFileSystem extends DistributedFileSystem {
     @Override
     public FSDataInputStream open(Path f, int bufferSize) throws IOException {
 
-        URI uri = f.toUri();
 //        String filePath = uri.getPath();
         String filePath = f.toString();
-        if (uri.getScheme() != null) {
-            StringBuffer sb = new StringBuffer(f.toString());
-            sb.setCharAt(0, 'h');
-            f = new Path(sb.toString());
-        }
+        f = Util.toHDFS(f);
         FileStatus status = smallFileServer.exist(filePath);
 
         if (status == FileStatus.EXIST) {
@@ -94,6 +90,7 @@ public class SmallFileSystem extends DistributedFileSystem {
             return null;
         } else {
             // not a small file, handle to hdfs.
+            dst = Util.toHDFS(dst);
             return this.create(dst);
         }
     }
